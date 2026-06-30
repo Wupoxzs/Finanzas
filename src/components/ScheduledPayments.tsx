@@ -18,25 +18,47 @@ export default function ScheduledPayments({ payments, onPayBill, onAddPayment, o
   const [amount, setAmount] = useState<string>('');
   const [dueDate, setDueDate] = useState<string>('');
   const [category, setCategory] = useState<string>(CATEGORIES.expense[0]);
-  const [recurring, setRecurring] = useState<'monthly' | 'once'>('monthly');
+  const [recurring, setRecurring] = useState<'weekly' | 'monthly' | 'once'>('monthly');
+  const [durationType, setDurationType] = useState<'infinite' | 'months' | 'days'>('infinite');
+  const [durationValue, setDurationValue] = useState<string>('5');
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0 || !title.trim() || !dueDate) return;
 
+    let computedEndDate: string | undefined = undefined;
+    if (recurring !== 'once' && durationType !== 'infinite') {
+      const val = parseInt(durationValue) || 1;
+      const d = new Date(dueDate + 'T12:00:00');
+      if (durationType === 'months') {
+        d.setMonth(d.getMonth() + val);
+      } else if (durationType === 'days') {
+        d.setDate(d.getDate() + val);
+      }
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      computedEndDate = `${yyyy}-${mm}-${dd}`;
+    }
+
     onAddPayment({
       title: title.trim(),
       amount: numAmount,
       dueDate,
       category,
-      recurring
+      recurring,
+      endDate: computedEndDate,
+      durationType: recurring !== 'once' ? durationType : undefined,
+      durationValue: recurring !== 'once' && durationType !== 'infinite' ? parseInt(durationValue) || undefined : undefined
     });
 
     // Reset Form
     setTitle('');
     setAmount('');
     setDueDate('');
+    setDurationType('infinite');
+    setDurationValue('5');
     setShowAddModal(false);
   };
 
@@ -135,10 +157,15 @@ export default function ScheduledPayments({ payments, onPayBill, onAddPayment, o
                       <span className="text-[9px] font-semibold text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded-md border border-gray-100">
                         {p.category}
                       </span>
-                      <span className="text-[9px] text-gray-400 font-medium">
-                        {p.recurring === 'monthly' ? 'Mensual' : 'Pago Único'}
+                      <span className="text-[9px] text-gray-400 font-semibold bg-gray-50/50 px-1.5 py-0.5 rounded-md border border-gray-100">
+                        {p.recurring === 'weekly' ? 'Semanal' : p.recurring === 'monthly' ? 'Mensual' : 'Pago Único'}
                       </span>
-                      <span className={`text-[9px] font-mono font-semibold flex items-center gap-0.5 ${
+                      {p.endDate && (
+                        <span className="text-[9px] font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-100/50">
+                          Plazo hasta: {p.endDate}
+                        </span>
+                      )}
+                      <span className={`text-[9px] font-mono font-bold flex items-center gap-0.5 ${
                         p.isPaid
                           ? 'text-gray-400'
                           : isOverdue
@@ -245,14 +272,92 @@ export default function ScheduledPayments({ payments, onPayBill, onAddPayment, o
                   </label>
                   <select
                     value={recurring}
-                    onChange={(e) => setRecurring(e.target.value as any)}
+                    onChange={(e) => {
+                      const val = e.target.value as any;
+                      setRecurring(val);
+                      if (val === 'once') {
+                        setDurationType('infinite');
+                      }
+                    }}
                     className="w-full bg-gray-50 border border-gray-200 focus:border-black focus:ring-1 focus:ring-black rounded-2xl py-2 px-3 text-xs focus:outline-hidden font-medium"
                   >
+                    <option value="weekly">Semanal</option>
                     <option value="monthly">Mensual</option>
                     <option value="once">Pago Único</option>
                   </select>
                 </div>
               </div>
+
+              {/* Plazo de Duración */}
+              {recurring !== 'once' && (
+                <div className="space-y-3 bg-gray-50/50 border border-gray-100 rounded-2xl p-3.5">
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider">
+                    Plazo de Duración
+                  </label>
+                  
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'infinite', label: 'Sin límite' },
+                      { id: 'months', label: 'Por meses' },
+                      { id: 'days', label: 'Por días' }
+                    ].map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setDurationType(opt.id as any)}
+                        className={`py-2 px-1 text-[11px] font-bold rounded-xl border text-center transition-all cursor-pointer ${
+                          durationType === opt.id
+                            ? 'bg-white text-black border-black shadow-xs'
+                            : 'bg-transparent text-gray-400 border-gray-200 hover:text-gray-600'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {durationType !== 'infinite' && (
+                    <div className="flex items-center gap-2 pt-1 animate-in fade-in duration-200">
+                      <span className="text-xs font-medium text-gray-500">Pagar durante:</span>
+                      <input
+                        type="number"
+                        min="1"
+                        required
+                        value={durationValue}
+                        onChange={(e) => setDurationValue(e.target.value)}
+                        className="w-20 bg-white border border-gray-200 focus:border-black focus:ring-1 focus:ring-black rounded-xl py-1.5 px-2 text-xs font-bold text-center focus:outline-hidden"
+                      />
+                      <span className="text-xs font-semibold text-gray-600">
+                        {durationType === 'months' ? 'meses' : 'días'}
+                      </span>
+                    </div>
+                  )}
+
+                  {dueDate && (
+                    <p className="text-[10px] text-gray-500 font-medium leading-normal">
+                      {durationType === 'infinite' ? (
+                        <span>♾️ El pago se repetirá indefinidamente.</span>
+                      ) : (
+                        (() => {
+                          const val = parseInt(durationValue) || 1;
+                          const d = new Date(dueDate + 'T12:00:00');
+                          if (durationType === 'months') {
+                            d.setMonth(d.getMonth() + val);
+                          } else {
+                            d.setDate(d.getDate() + val);
+                          }
+                          const dateStr = d.toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' });
+                          return (
+                            <span>
+                              📅 Termina el <strong className="text-gray-900">{dateStr}</strong> (No se renovará después de esta fecha).
+                            </span>
+                          );
+                        })()
+                      )}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Category */}
               <div>

@@ -25,7 +25,10 @@ export interface ScheduledPayment {
   dueDate: string; // YYYY-MM-DD
   category: string;
   isPaid: boolean;
-  recurring: 'monthly' | 'once';
+  recurring: 'weekly' | 'monthly' | 'once';
+  endDate?: string; // YYYY-MM-DD
+  durationType?: 'months' | 'days' | 'infinite';
+  durationValue?: number;
 }
 
 export interface ChartDataPoint {

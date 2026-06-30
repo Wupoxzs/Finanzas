@@ -55,6 +55,10 @@ export default function FinanceChart({ transactions, banks, mainBalance }: Finan
 
       // Rewind transactions of this day
       for (const t of dayTransactions) {
+        // Skip external deposits from rewinding available balance (since they never touched main balance)
+        if (t.description.includes('Externo') || t.description.includes('no descontado')) {
+          continue;
+        }
         if (t.type === 'income') {
           currentMain -= t.amount;
         } else {
