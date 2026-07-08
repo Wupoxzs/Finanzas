@@ -544,6 +544,19 @@ export default function App() {
 
   const netWorthValue = mainBalance + totalSavingsValue;
 
+  const dynamicSavingsDescription = useMemo(() => {
+    if (banks.length === 0) {
+      return "Dinero apartado de forma segura. Agrega tu primer espacio de ahorro abajo con rendimientos anuales personalizados.";
+    }
+    const bankNames = banks.map(b => b.name);
+    if (bankNames.length === 1) {
+      return `Dinero apartado y distribuido en tu cuenta de ${bankNames[0]} con rendimientos garantizados.`;
+    }
+    const lastBank = bankNames.pop();
+    const joinedNames = bankNames.join(', ') + ' y ' + lastBank;
+    return `Dinero apartado y distribuido en cuentas ${joinedNames} con rendimientos garantizados.`;
+  }, [banks]);
+
   return (
     <div id="app-root-viewport" className="min-h-screen pb-16 bg-[#f5f5f7]">
       {/* Dynamic Toast Feedback Notification */}
@@ -559,7 +572,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
-              <span className="text-white text-xs font-bold font-mono"></span>
+              <span className="text-white text-sm font-black font-sans leading-none">W</span>
             </div>
             <div>
               <h1 className="text-sm font-bold tracking-tight text-gray-950">Billetera</h1>
@@ -717,7 +730,7 @@ export default function App() {
                 ${totalSavingsValue.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
               </span>
               <p className="text-[10px] text-gray-400 mt-2 leading-relaxed">
-                Dinero apartado y distribuido en cuentas Nu, Mercado Pago y Klar con rendimientos garantizados.
+                {dynamicSavingsDescription}
               </p>
             </div>
 
@@ -802,7 +815,7 @@ export default function App() {
       {/* Modal: Ajustar Dinero Actual Manualmente */}
       {showAdjustBalanceModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-[32px] max-w-md w-full p-8 border border-gray-100 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[32px] max-w-md w-full p-6 sm:p-8 border border-gray-100 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -950,7 +963,7 @@ export default function App() {
       {/* Modal: Administrar Base de Datos Gratis */}
       {showDbModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-[32px] max-w-lg w-full p-8 border border-gray-100 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[32px] max-w-lg w-full p-6 sm:p-8 border border-gray-100 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2.5">
@@ -1062,7 +1075,7 @@ export default function App() {
       {/* Modal: Confirmación Personalizado */}
       {confirmModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-[32px] max-w-sm w-full p-8 border border-gray-100 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[32px] max-w-sm w-full p-6 sm:p-8 border border-gray-100 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             {/* Soft background glow depending on action type */}
             <div className={`absolute top-0 right-0 w-24 h-24 rounded-full filter blur-2xl opacity-5 pointer-events-none -mr-6 -mt-6 ${
               confirmModal.type === 'danger' ? 'bg-rose-500' : 'bg-amber-500'

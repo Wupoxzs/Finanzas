@@ -1,5 +1,5 @@
 {
-  "name": "Finanzas Tiempo Real",
+  "name": "W.U.P.O",
   "description": "Control de finanzas en tiempo real estilo Apple, con ingresos, gastos, pagos programados, cuentas de ahorro con rendimiento del 13% anual y gráficas interactivas.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

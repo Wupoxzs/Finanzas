@@ -204,7 +204,7 @@ export default function ScheduledPayments({ payments, onPayBill, onAddPayment, o
       {/* Add Scheduled Payment Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold tracking-tight text-gray-900">Programar Nuevo Pago</h3>
               <button

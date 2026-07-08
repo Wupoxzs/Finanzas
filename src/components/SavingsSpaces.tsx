@@ -315,7 +315,7 @@ export default function SavingsSpaces({
       {/* Transfer Modal overlay */}
       {selectedBank && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-gray-100 animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold tracking-tight text-gray-900 flex items-center gap-2">
                 <ArrowLeftRight className="w-5 h-5 text-gray-500" />
@@ -444,7 +444,7 @@ export default function SavingsSpaces({
       {/* Modal: Agregar Cuenta de Ahorro */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-[32px] max-w-md w-full p-8 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[32px] max-w-md w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Nuevo Espacio de Ahorro</h3>
@@ -566,7 +566,7 @@ export default function SavingsSpaces({
       {/* Modal: Editar Cuenta de Ahorro */}
       {showEditModal && editingBank && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-[32px] max-w-md w-full p-8 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[32px] max-w-md w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Editar Cuenta</h3>

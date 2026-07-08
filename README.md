@@ -1,23 +1,20 @@
-🚀 [Personal Financial Control] — Master Your Money, Simply.
-Take control of your finances without the headache. PFC is a sleek, intuitive, and powerful financial management app designed to help you track your spending, smash your savings goals, and build wealth—all in one place.
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-Whether you're creating a budget for the first time or looking for deep insights into your financial habits, this tool is built to make money management effortless.
+# Run and deploy your AI Studio app
 
-✨ Why choose PFC?
-📊 Smart Tracking: Easily log your daily income and expenses with just a few taps.
+This contains everything you need to run your app locally.
 
-🎯 Visual Goals: Set clear saving targets and watch your progress grow in real-time.
+View your app in AI Studio: https://ai.studio/apps/9efd08e2-e95e-4331-a540-e61caeb50078
 
-📈 Deep Insights: Beautiful, easy-to-read charts that actually make sense of your money.
+## Run Locally
 
-🔒 Secure & Private: Your financial data stays yours, period.
+**Prerequisites:**  Node.js
 
-Stop wondering where your money went, and start telling it where to go.
 
-🚀 Get Started
-Check out the live demo here: https://manager-rho-black.vercel.app/
-
-Any suggestions are well received ;)
-
-https://www.instagram.com/__alex.btw
-www.linkedin.com/in/alejandroalvaradogarcia
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
